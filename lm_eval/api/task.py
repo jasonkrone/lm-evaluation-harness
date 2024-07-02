@@ -1142,11 +1142,11 @@ class ConfigurableTask(Task):
                 elif callable(doc_to_decontamination_query):
                     return doc_to_decontamination_query(doc)
                 else:
-                    return ast.literal_eval(
-                        utils.apply_template(
-                            self.config.doc_to_decontamination_query, doc
-                        )
-                    )
+                    template = utils.apply_template(self.config.doc_to_decontamination_query, doc)
+                    try:
+                        return ast.literal_eval(template)
+                    else:
+                        return template
 
     def _process_doc(self, doc: dict) -> dict:
         """

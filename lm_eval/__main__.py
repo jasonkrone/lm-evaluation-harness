@@ -449,6 +449,8 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
             # Tear down wandb run once all the logging is done.
             wandb_logger.run.finish()
 
+        return results
+
 
 if __name__ == "__main__":
     cli_evaluate()
