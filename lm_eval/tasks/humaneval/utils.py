@@ -21,10 +21,15 @@ def build_references(doc):
     return doc["test"] + "\n" + f"check({doc['entry_point']})"
 
 
-def build_predictions(resps, docs):
+def build_predictions(resps, docs, resp_prefix=""):
     preds = []
     for resp, doc in zip(resps, docs):
-        pred = [doc["prompt"] + r for r in resp]
+        pred = [doc["prompt"] + resp_prefix + r for r in resp]
         preds.append(pred)
 
     return preds
+
+
+def build_predictions_with_space_before_response(resps, docs):
+    return build_predictions(resps, docs, " ")
+
