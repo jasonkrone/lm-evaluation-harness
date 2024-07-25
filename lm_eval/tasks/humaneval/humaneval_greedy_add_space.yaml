@@ -1,0 +1,7 @@
+include: humaneval-greedy.yaml
+task: humaneval_greedy_add_space
+filter_list:
+  - name: "n=1" # number of samples to estimate pass@k
+    filter:
+      - function: "custom"
+        filter_fn: !function utils.build_predictions_with_space_before_response
