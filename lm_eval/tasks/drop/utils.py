@@ -8,6 +8,20 @@ from scipy.optimize import linear_sum_assignment
 _ARTICLES = re.compile(r"\b(a|an|the)\b", re.UNICODE)
 
 
+def build_predictions(resps, docs):
+    preds = []
+    for resp in resps:
+        assert len(resp) == 1
+        resp = resp[0].split("\n\n")[0]
+        preds.append(resp)
+    return preds
+
+
+def doc_to_target(doc):
+    target = ", ".join(doc["answers"][0])
+    return target
+
+
 def process_docs(dataset):
     def _process(doc):
         return {
@@ -68,7 +82,8 @@ def process_results(doc, results):
     max_f1 = 0
     for gold_answer in golds:
         exact_match, f1_score = get_metrics(preds, gold_answer)
-        if gold_answer[0].strip():
+        # see https://github.com/allenai/allennlp-reading-comprehension/blob/14fc0a424441de1b1c9cba8745f678df447b407f/allennlp_rc/eval/drop_eval.py#L219
+        if gold_answer[0].strip() != "":
             max_em = max(max_em, exact_match)
             max_f1 = max(max_f1, f1_score)
     return {"em": max_em, "f1": max_f1}

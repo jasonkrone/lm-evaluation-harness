@@ -74,6 +74,8 @@ fewshot_config:
           - sadness
       answerKey: 'The answer should be the feeling of someone getting divorced who was doing all the work. Of the above choices, the closest feeling is bitterness. So the answer is (c).'
 
+    # this 8th question is included to prevent FirstNSampler from throwing an error when it tries to sample num_fewshot + 1 examples
+    # note that this occurs because the fewshot_split is None == test_split which is None so it tries to draw num_fewshot + 1 examples
     - question: 'SHOULD NEVER BE SELECTED'
       choices:
         text:
