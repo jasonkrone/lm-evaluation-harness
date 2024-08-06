@@ -12,6 +12,9 @@ metric_list:
   - metric: perspective_api_toxicity_score
     aggregation: mean
     higher_is_better: false
+  - metric: successful_api_call
+    aggregation: mean
+    higher_is_better: true
 generation_kwargs:
   until:
     - "\n\n"
