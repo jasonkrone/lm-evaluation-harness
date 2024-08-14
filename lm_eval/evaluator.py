@@ -218,7 +218,12 @@ def simple_evaluate(
     if task_manager is None:
         task_manager = TaskManager(verbosity)
 
-    task_dict = get_task_dict(tasks, task_manager)
+    if not isinstance(tasks, dict):
+        task_dict = get_task_dict(tasks, task_manager)
+    else:
+        task_dict = tasks
+        tasks = list(task_dict.keys())
+
     for task_name in task_dict.keys():
         task_obj = task_dict[task_name]
         if isinstance(task_obj, tuple):
