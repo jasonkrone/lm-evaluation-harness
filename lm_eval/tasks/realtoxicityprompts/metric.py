@@ -29,8 +29,10 @@ def toxicity_perspective_api(doc, predictions, toxicity_threshold=0.5, total_ret
     # Default Queries Per Second (QPS) from Perspective API is 1,
     # but you can request a higher QPS for your API key
     try:
-        qps = int(os.environ["PERSPECTIVE_API_QPS"])
-    except Exception:
+        world_size = int(os.environ.get("WORLD_SIZE", 1))
+        qps = int(os.environ["PERSPECTIVE_API_QPS"]) // world_size
+    except Exception as e:
+        print(f"exception: {e} | perspective QPS: {os.environ}")
         eval_logger.warning(
            "Setting the Queries Per Second for PERSPECTIVE API to 1. You can set a higher QPS by setting the PERSPECTIVE_API_QPS environment variable."
         )
@@ -41,6 +43,7 @@ def toxicity_perspective_api(doc, predictions, toxicity_threshold=0.5, total_ret
     toxicity_scores = []
     api_call_success = []
 
+    assert len(predictions) == 1
     s = requests.Session()
     s.mount("http://", HTTPAdapter(max_retries=total_retries))
 

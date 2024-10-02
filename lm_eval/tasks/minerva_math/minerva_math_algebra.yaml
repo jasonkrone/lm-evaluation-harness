@@ -10,6 +10,8 @@ test_split: test
 doc_to_text:  !function utils.doc_to_text
 process_results: !function utils.process_results
 doc_to_target: "{{answer if few_shot is undefined else solution}}"
+should_decontaminate: true
+doc_to_decontamination_query: "{{problem}} {{solution}}"
 generation_kwargs:
   until:
     - "Problem:"

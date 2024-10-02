@@ -36,6 +36,10 @@ from lm_eval.models.utils import (
     stop_sequences_criteria,
 )
 
+try:
+    from hf_olmo import OLMoForCausalLM
+except:
+    print("OLMo models not available")
 
 eval_logger = utils.eval_logger
 
@@ -907,7 +911,7 @@ class HFLM(TemplateLM):
 
         return loglikelihoods
 
-    def _batch_scheduler(self, pos, n_reordered_requests):
+    def _batch_scheduler(self, pos, n_reordered_requests, auto_batch_size_offset=4):
         sched = pos // int(len(n_reordered_requests) / self.batch_schedule)
         if sched in self.batch_sizes:
             return self.batch_sizes[sched]
@@ -920,7 +924,7 @@ class HFLM(TemplateLM):
         print(
             f"Passed argument batch_size = auto:{self.batch_schedule}. Detecting largest batch size"
         )
-        self.batch_sizes[sched] = self._detect_batch_size(n_reordered_requests, pos)
+        self.batch_sizes[sched] = max(self._detect_batch_size(n_reordered_requests, pos) - auto_batch_size_offset, 1)
         print(f"Determined largest batch size: {self.batch_sizes[sched]}")
         return self.batch_sizes[sched]
 

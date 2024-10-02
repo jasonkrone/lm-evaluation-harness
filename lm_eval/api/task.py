@@ -1314,6 +1314,7 @@ class ConfigurableTask(Task):
             return request_list
 
         elif self.OUTPUT_TYPE == "generate_until":
+            assert self.config.generation_kwargs["until"] is not None
             arguments = (ctx, deepcopy(self.config.generation_kwargs))
 
         return Instance(

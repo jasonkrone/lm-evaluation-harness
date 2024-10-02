@@ -6,6 +6,8 @@ test_split: train
 num_fewshot: 0
 doc_to_text: prompt
 doc_to_target: 0
+should_decontaminate: true
+doc_to_decontamination_query: prompt
 generation_kwargs:
   until: []
   do_sample: false
