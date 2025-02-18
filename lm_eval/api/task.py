@@ -1330,9 +1330,11 @@ class ConfigurableTask(Task):
         if self.OUTPUT_TYPE == "loglikelihood":
             results = results[0]
             ll, is_greedy = results
+            nll_per_char = -1 * ll / len(self.doc_to_target(doc))
             return {
                 **({"perplexity": ll} if "perplexity" in use_metric else {}),
                 **({"acc": int(is_greedy)} if "acc" in use_metric else {}),
+                **({"nll_per_char": nll_per_char} if "nll_per_char" in use_metric else {}),
             }
         elif self.OUTPUT_TYPE == "loglikelihood_rolling":
             (loglikelihood,) = results
@@ -1414,6 +1416,8 @@ class ConfigurableTask(Task):
 
             prob_norm = utils.softmax(lls)
 
+            nll_per_char = -1 * lls[gold] / completion_len[gold]
+
             # TODO use keyword arguments to the metric?
             # gold, pred, norm stuff, the original lls,
             result_dict = {
@@ -1427,6 +1431,7 @@ class ConfigurableTask(Task):
                     if "brier_score" in use_metric
                     else {}
                 ),
+                **({"nll_per_char": nll_per_char} if "nll_per_char" in use_metric else {}),
             }
 
             if "acc_mutual_info" in use_metric:

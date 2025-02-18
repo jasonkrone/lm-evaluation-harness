@@ -220,7 +220,15 @@ def exact_match_hf_evaluate(
     return {"exact_match": np.mean(score_list)}
 
 
-###
+
+@register_metric(
+    metric="nll_per_char",
+    higher_is_better=False,
+    output_type="multiple_choice",
+    aggregation="mean", 
+)
+def nll_per_char(items):
+    return items
 
 
 @register_metric(
